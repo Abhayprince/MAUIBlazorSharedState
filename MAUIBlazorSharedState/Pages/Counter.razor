@@ -1,0 +1,33 @@
+﻿@page "/counter"
+@using MAUIBlazorSharedState.States;
+@using System.ComponentModel;
+
+@implements IDisposable
+
+@inject CounterState CounterState
+
+
+<h3 class="text-center mb-4">Blazor Component</h3>
+
+<h3>Counter</h3>
+
+<p role="status">Current count: @CounterState.Counter</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Increase counter from Blazor</button>
+
+@code {
+    private void IncrementCount() => CounterState.Counter++;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        CounterState.PropertyChanged += OnCounterChanged;
+    }
+
+    private void OnCounterChanged(object? sender, PropertyChangedEventArgs e) => StateHasChanged();
+
+    public void Dispose()
+    {
+        CounterState.PropertyChanged -= OnCounterChanged;
+    }
+}
